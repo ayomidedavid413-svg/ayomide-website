@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me | Ayomide</title>
+<style>
+  :root { --bg:#eaf2ff; --card:#ffffff; --text:#12306b; --accent:#1e5bd8; --nav:#1e5bd8; --gold:#f2b705; --shadow:0 6px 18px rgba(18,48,107,.15); }
+  body.dark { --bg:#0e1525; --card:#1a2338; --text:#e6ecff; --accent:#5b8dff; --nav:#16223f; --shadow:0 6px 18px rgba(0,0,0,.5); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Segoe UI', Arial, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; transition:background .3s, color .3s; }
+  nav { background:var(--nav); padding:16px 28px; display:flex; flex-wrap:wrap; gap:22px; align-items:center; position:sticky; top:0; z-index:10; box-shadow:0 2px 10px rgba(0,0,0,.25); }
+  nav a { color:#fff; text-decoration:none; font-weight:600; padding:4px 2px; border-bottom:2px solid transparent; transition:border-color .2s; }
+  nav a:hover, nav a.active { border-bottom-color:#fff; }
+  nav button { margin-left:auto; padding:9px 16px; border:none; border-radius:22px; cursor:pointer; font-weight:bold; background:#fff; color:#1e5bd8; transition:transform .2s; }
+  nav button:hover { transform:scale(1.06); }
+  main { flex:1; width:100%; max-width:1000px; margin:0 auto; padding:40px 20px 20px; }
+  h1 { color:var(--accent); font-size:2.4rem; text-align:center; margin-bottom:6px; }
+  .subtitle { text-align:center; opacity:.8; margin-bottom:36px; }
+  h2 { color:var(--accent); margin-bottom:14px; }
+  p { line-height:1.8; margin-bottom:14px; }
+  .card { background:var(--card); border-radius:18px; padding:30px; margin-bottom:30px; box-shadow:var(--shadow); transition:transform .25s, box-shadow .25s; }
+  .card:hover { transform:translateY(-6px); box-shadow:0 14px 28px rgba(18,48,107,.25); }
+  figure { margin:20px auto 0; text-align:center; max-width:520px; }
+  figure img { width:100%; height:auto; object-fit:contain; border-radius:16px; border:4px solid var(--accent); box-shadow:var(--shadow); display:block; transition:transform .3s; }
+  figure img:hover { transform:scale(1.03); }
+  figcaption { margin-top:10px; font-size:.95rem; opacity:.85; }
+  .videobox { background:#000; border-radius:14px; width:100%; margin-top:16px; overflow:hidden; box-shadow:var(--shadow); }
+  .videobox video { width:100%; display:block; max-height:460px; }
+  .btn { display:block; background:var(--gold); color:#222; text-align:center; text-decoration:none; font-weight:bold; font-size:1.1rem; padding:18px; border-radius:16px; margin-bottom:24px; box-shadow:var(--shadow); transition:transform .25s, box-shadow .25s; }
+  .btn:hover { transform:translateY(-5px) scale(1.02); box-shadow:0 12px 24px rgba(242,183,5,.45); }
+  footer { text-align:center; padding:26px; background:#0b2a6b; color:#fff; margin-top:30px; }
+  #musicBtn { position:fixed; bottom:20px; right:20px; width:56px; height:56px; border:none; border-radius:50%; background:var(--accent); color:#fff; font-size:24px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:50; transition:transform .2s; }
+  #musicBtn:hover { transform:scale(1.12); }
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+<button id="musicBtn" title="Play or pause music">&#9835;</button>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="index.html#learning">Learning</a>
+  <a href="index.html#hobbies">Hobbies</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="about.html" class="active">About Me</a>
+  <button id="modeBtn">Dark Mode</button>
+</nav>
+
+<main>
+  <h1>About Me</h1>
+  <p class="subtitle">Computer science student, learner, builder</p>
+
+  <div class="card">
+    <h2>Welcome to My World</h2>
+    <p>My name is Ayomide. I study Computer Science at NOUN and I am learning to code.</p>
+    <p>I enjoy technology, learning new skills, building websites and discovering new things in the world of computing.</p>
+    <figure>
+      <img src="web.mp5.jpeg" alt="Ayomide">
+    </figure>
+  </div>
+
+  <div class="card">
+    <h2>My Pictures</h2>
+    <figure>
+      <img src="1.jpg" alt="Ayomide picture">
+    </figure>
+  </div>
+
+  <div class="card">
+    <h2>My Video</h2>
+    <p>Here is a personal video from my collection.</p>
+    <div class="videobox">
+      <video controls>
+        <source src="fire.mp4" type="video/mp4">
+        Your browser does not support video.
+      </video>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Web Design Video</h2>
+    <p>Watch this short video about how a web design starts and learn more about creating websites.</p>
+  </div>
+
+  <a class="btn" href="https://www.youtube.com/watch?v=DWOSu8hqFDo" target="_blank">Watch on YouTube</a>
+  <a class="btn" href="index.html">Back to Home</a>
+</main>
+
+<footer>&copy; 2026 Ayomide. All Rights Reserved.</footer>
+
+<script>
+  const btn = document.getElementById('modeBtn');
+  if (localStorage.getItem('mode') === 'dark') { document.body.classList.add('dark'); btn.textContent = 'Light Mode'; }
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const dark = document.body.classList.contains('dark');
+    btn.textContent = dark ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('mode', dark ? 'dark' : 'light');
+  });
+</script>
+
+<script>
+  const music = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicBtn');
+  music.volume = 0.4;
+  const savedTime = parseFloat(sessionStorage.getItem('musicTime') || '0');
+  const wantsMusic = sessionStorage.getItem('musicOn') !== 'off';
+  music.addEventListener('loadedmetadata', () => { if (savedTime) music.currentTime = savedTime; });
+
+  function updateButton() { musicBtn.innerHTML = music.paused ? '&#9835;' : '&#10073;&#10073;'; }
+  function startMusic() { music.play().then(updateButton).catch(() => {}); }
+
+  if (wantsMusic) {
+    startMusic();
+    const unlock = () => { if (music.paused && sessionStorage.getItem('musicOn') !== 'off') startMusic(); };
+    document.addEventListener('click', unlock, { once:true });
+    document.addEventListener('touchstart', unlock, { once:true });
+    document.addEventListener('scroll', unlock, { once:true });
+  }
+
+  musicBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (music.paused) { sessionStorage.setItem('musicOn', 'on'); startMusic(); }
+    else { music.pause(); sessionStorage.setItem('musicOn', 'off'); updateButton(); }
+  });
+
+  setInterval(() => sessionStorage.setItem('musicTime', music.currentTime), 1000);
+  window.addEventListener('beforeunload', () => sessionStorage.setItem('musicTime', music.currentTime));
+  music.addEventListener('play', updateButton);
+  music.addEventListener('pause', updateButton);
+</script>
+
+</body>
+</html>
