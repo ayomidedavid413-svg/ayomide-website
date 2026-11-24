@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayomide's Personal Website</title>
+<style>
+  :root { --bg:#eaf2ff; --card:#ffffff; --text:#12306b; --accent:#1e5bd8; --nav:#1e5bd8; --shadow:0 6px 18px rgba(18,48,107,.15); }
+  body.dark { --bg:#0e1525; --card:#1a2338; --text:#e6ecff; --accent:#5b8dff; --nav:#16223f; --shadow:0 6px 18px rgba(0,0,0,.5); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Segoe UI', Arial, sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; transition:background .3s, color .3s; }
+  nav { background:var(--nav); padding:16px 28px; display:flex; flex-wrap:wrap; gap:22px; align-items:center; position:sticky; top:0; z-index:10; box-shadow:0 2px 10px rgba(0,0,0,.25); }
+  nav a { color:#fff; text-decoration:none; font-weight:600; padding:4px 2px; border-bottom:2px solid transparent; transition:border-color .2s; }
+  nav a:hover { border-bottom-color:#fff; }
+  nav button { margin-left:auto; padding:9px 16px; border:none; border-radius:22px; cursor:pointer; font-weight:bold; background:#fff; color:#1e5bd8; transition:transform .2s; }
+  nav button:hover { transform:scale(1.06); }
+  section { max-width:1000px; margin:40px auto; padding:0 20px; scroll-margin-top:80px; }
+  h1, h2 { color:var(--accent); margin-bottom:14px; }
+  p { line-height:1.7; margin-bottom:12px; }
+  .card { background:var(--card); border-radius:18px; padding:26px; box-shadow:var(--shadow); transition:transform .25s, box-shadow .25s; }
+  .card:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 14px 28px rgba(18,48,107,.25); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:18px; }
+  .hero { display:flex; flex-wrap:wrap; gap:24px; align-items:center; }
+  .hero > div { flex:1 1 300px; }
+  .photos { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin-top:20px; }
+  img { width:100%; height:auto; object-fit:contain; border-radius:16px; display:block; box-shadow:var(--shadow); cursor:zoom-in; transition:transform .3s; }
+  img:hover { transform:scale(1.04); }
+  a.link { color:var(--accent); font-weight:bold; }
+  footer { text-align:center; padding:26px; background:var(--nav); color:#fff; margin-top:50px; }
+  #musicBtn { position:fixed; bottom:20px; right:20px; width:56px; height:56px; border:none; border-radius:50%; background:var(--accent); color:#fff; font-size:24px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:50; transition:transform .2s; }
+  #musicBtn:hover { transform:scale(1.12); }
+
+  /* glowing animated background */
+  .bg-glow { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+  .orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:.45; animation:drift 18s ease-in-out infinite alternate; }
+  .o1 { width:420px; height:420px; background:#4f8cff; top:-100px; left:-100px; }
+  .o2 { width:480px; height:480px; background:#ffb703; top:35%; right:-160px; animation-duration:24s; }
+  .o3 { width:380px; height:380px; background:#8a5cff; bottom:-120px; left:30%; animation-duration:21s; }
+  body.dark .orb { opacity:.22; }
+  @keyframes drift { from { transform:translate(0,0) scale(1); } to { transform:translate(90px,60px) scale(1.25); } }
+
+  /* typing line */
+  .typing::after { content:'|'; margin-left:3px; animation:blink .8s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+
+  /* back to top */
+  #toTop { position:fixed; right:20px; bottom:90px; width:48px; height:48px; border:none; border-radius:50%; background:var(--accent); color:#fff; font-size:22px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:50; opacity:0; pointer-events:none; transform:translateY(10px); transition:opacity .3s, transform .3s; }
+  #toTop.show { opacity:1; pointer-events:auto; transform:none; }
+
+  /* copy buttons */
+  .copybtn { margin-left:10px; padding:6px 14px; border:none; border-radius:16px; background:var(--accent); color:#fff; font-weight:bold; cursor:pointer; transition:transform .2s; }
+  .copybtn:hover { transform:scale(1.08); }
+
+  /* gallery and lightbox */
+  .gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-top:16px; }
+  .gallery img { height:200px; object-fit:cover; object-position:top; }
+  #lightbox { position:fixed; inset:0; background:rgba(5,10,25,.92); display:none; align-items:center; justify-content:center; z-index:100; }
+  #lightbox.open { display:flex; }
+  #lbImg { max-width:90vw; max-height:82vh; width:auto; height:auto; object-fit:contain; border-radius:12px; cursor:default; box-shadow:0 10px 40px rgba(0,0,0,.6); animation:lbIn .35s ease-out; }
+  #lbImg:hover { transform:none; }
+  @keyframes lbIn { from { opacity:0; transform:scale(.8) rotateY(25deg); } to { opacity:1; transform:none; } }
+  #lightbox button { position:absolute; width:52px; height:52px; border:none; border-radius:50%; background:rgba(255,255,255,.18); color:#fff; font-size:30px; cursor:pointer; }
+  #lightbox button:hover { background:rgba(255,255,255,.35); }
+  #lbClose { top:20px; right:20px; }
+  #lbPrev { left:16px; top:50%; margin-top:-26px; }
+  #lbNext { right:16px; top:50%; margin-top:-26px; }
+  #lbCount { position:absolute; bottom:18px; left:0; right:0; text-align:center; color:#fff; }
+
+  /* 3D throw-in entrance */
+  .throw { opacity:0; will-change:transform, opacity; }
+  .throw.in { animation-duration:1.3s; animation-timing-function:ease-out; animation-fill-mode:both; }
+  .throw.done { opacity:1; animation:none; }
+  .from-left.in   { animation-name:fromLeft; }
+  .from-right.in  { animation-name:fromRight; }
+  .from-top.in    { animation-name:fromTop; }
+  .from-bottom.in { animation-name:fromBottom; }
+  .from-far.in    { animation-name:fromFar; }
+  .from-spin.in   { animation-name:fromSpin; }
+  @keyframes fromLeft   { 0% { opacity:0; transform:perspective(1200px) translate3d(-120vw,-40px,-400px) rotateY(70deg) rotateZ(-12deg); } 60% { opacity:1; transform:perspective(1200px) translate3d(30px,0,60px) rotateY(-12deg) rotateZ(3deg); } 80% { transform:perspective(1200px) translate3d(-12px,0,0) rotateY(5deg) rotateZ(-1deg); } 100% { opacity:1; transform:perspective(1200px); } }
+  @keyframes fromRight  { 0% { opacity:0; transform:perspective(1200px) translate3d(120vw,40px,-400px) rotateY(-70deg) rotateZ(12deg); } 60% { opacity:1; transform:perspective(1200px) translate3d(-30px,0,60px) rotateY(12deg) rotateZ(-3deg); } 80% { transform:perspective(1200px) translate3d(12px,0,0) rotateY(-5deg) rotateZ(1deg); } 100% { opacity:1; transform:perspective(1200px); } }
+  @keyframes fromTop    { 0% { opacity:0; transform:perspective(1200px) translate3d(0,-110vh,-300px) rotateX(-80deg); } 55% { opacity:1; transform:perspective(1200px) translate3d(0,40px,40px) rotateX(14deg); } 75% { transform:perspective(1200px) translate3d(0,-14px,0) rotateX(-6deg); } 90% { transform:perspective(1200px) translate3d(0,5px,0) rotateX(2deg); } 100% { opacity:1; transform:perspective(1200px); } }
+  @keyframes fromBottom { 0% { opacity:0; transform:perspective(1200px) translate3d(0,110vh,-300px) rotateX(80deg); } 60% { opacity:1; transform:perspective(1200px) translate3d(0,-30px,50px) rotateX(-12deg); } 80% { transform:perspective(1200px) translate3d(0,10px,0) rotateX(5deg); } 100% { opacity:1; transform:perspective(1200px); } }
+  @keyframes fromFar    { 0% { opacity:0; transform:perspective(1200px) translate3d(0,0,-1500px) scale(.1) rotateZ(25deg); } 60% { opacity:1; transform:perspective(1200px) translate3d(0,0,80px) scale(1.08) rotateZ(-4deg); } 80% { transform:perspective(1200px) scale(.97) rotateZ(1.5deg); } 100% { opacity:1; transform:perspective(1200px); } }
+  @keyframes fromSpin   { 0% { opacity:0; transform:perspective(1200px) translate3d(-60vw,60vh,-300px) rotateZ(-540deg) scale(.2); } 65% { opacity:1; transform:perspective(1200px) translate3d(0,0,30px) rotateZ(14deg) scale(1.06); } 82% { transform:perspective(1200px) rotateZ(-5deg) scale(.98); } 100% { opacity:1; transform:perspective(1200px); } }
+  @media (prefers-reduced-motion: reduce) { .throw { opacity:1 !important; animation:none !important; } .orb { animation:none; } }
+</style>
+<style>
+/* ===== loading screen ===== */
+#loader { position:fixed; inset:0; z-index:1000; background:#0b1a3a; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; transition:opacity .6s ease, visibility .6s ease; animation:loaderOut .6s ease 5s forwards; }
+#loader.hide { opacity:0; visibility:hidden; }
+#loader .ld-name { font-size:clamp(2.2rem,8vw,4.5rem); font-weight:800; letter-spacing:.12em; color:#fff; text-shadow:0 0 24px #4f8cff, 0 0 60px #4f8cff; animation:ldPulse 1.4s ease-in-out infinite alternate; }
+#loader .ld-sub { color:#9db8ff; letter-spacing:.3em; font-size:.85rem; text-transform:uppercase; }
+#loader .ld-bar { width:min(260px,70vw); height:6px; border-radius:6px; background:rgba(255,255,255,.15); overflow:hidden; }
+#loader .ld-bar i { display:block; height:100%; width:0; background:linear-gradient(90deg,#4f8cff,#ffb703); border-radius:6px; animation:ldFill 1.5s ease-out forwards; }
+@keyframes ldFill { to { width:100%; } }
+@keyframes ldPulse { from { transform:scale(.97); } to { transform:scale(1.04); } }
+@keyframes loaderOut { to { opacity:0; visibility:hidden; } }
+
+/* ===== live wallpaper: your pictures as a soft watermark that sways like a breeze while music plays ===== */
+#wallpaper { position:fixed; inset:-4%; z-index:-2; overflow:hidden; pointer-events:none; }
+#wallpaper .wp { position:absolute; inset:0; background-size:cover; background-position:center top; background-repeat:no-repeat; opacity:0; transition:opacity 3s ease-in-out; transform-origin:50% 40%; animation:breeze 16s ease-in-out infinite alternate; animation-play-state:paused; filter:saturate(.9); }
+#wallpaper .wp.show { opacity:.16; }
+body.dark #wallpaper .wp.show { opacity:.10; }
+body.music-on #wallpaper .wp { animation-play-state:running; }
+@keyframes breeze {
+  0%   { transform:scale(1.06) translate(0,0) rotate(0deg) skewX(0deg); }
+  25%  { transform:scale(1.08) translate(-1.2%,.6%) rotate(.5deg) skewX(.6deg); }
+  50%  { transform:scale(1.10) translate(.8%,-.8%) rotate(-.4deg) skewX(-.5deg); }
+  75%  { transform:scale(1.09) translate(-.6%,.9%) rotate(.3deg) skewX(.4deg); }
+  100% { transform:scale(1.12) translate(1%,-.4%) rotate(-.5deg) skewX(-.6deg); }
+}
+@media (prefers-reduced-motion: reduce) { #wallpaper .wp { animation:none; } }
+
+/* ===== flag-wave wallpaper canvas, voice button, picture zoom buttons ===== */
+#flagCanvas { position:fixed; inset:0; width:100%; height:100%; z-index:-2; opacity:.28; pointer-events:none; }
+body.dark #flagCanvas { opacity:.18; }
+#voiceBtn { position:fixed; right:20px; bottom:210px; width:48px; height:48px; border:none; border-radius:50%; background:var(--accent); color:#fff; font-size:20px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:50; transition:transform .2s, background .2s; }
+#voiceBtn:hover { transform:scale(1.12); }
+#voiceBtn.on { background:#e03e3e; }
+#lbZoomIn { top:20px; right:84px; }
+#lbZoomOut { top:20px; right:148px; }
+
+/* ===== scroll progress bar, greeting, sparkles, confetti ===== */
+#scrollBar { position:fixed; top:0; left:0; height:4px; width:0; background:linear-gradient(90deg,#4f8cff,#ffb703,#8a5cff); z-index:200; transition:width .1s linear; }
+.greet { font-weight:600; color:var(--accent); margin-bottom:8px; }
+.spark { position:fixed; pointer-events:none; z-index:900; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle,#fff,#ffb703 60%,transparent 70%); animation:sparkOut .8s ease-out forwards; }
+@keyframes sparkOut { to { opacity:0; transform:translate(var(--dx),var(--dy)) scale(.1); } }
+.confetti { position:fixed; top:-12px; width:10px; height:14px; z-index:950; pointer-events:none; animation:confFall linear forwards; }
+@keyframes confFall { to { transform:translate3d(var(--cx),105vh,0) rotate(var(--cr)); opacity:.9; } }
+
+/* ===== music pill (title + volume) ===== */
+#musicPill { position:fixed; bottom:28px; right:86px; display:flex; align-items:center; gap:10px; max-width:calc(100vw - 180px); padding:8px 14px; border-radius:30px; background:var(--card); color:var(--text); box-shadow:var(--shadow); z-index:50; font-size:.85rem; }
+#musicPill .mp-title { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:130px; }
+#musicPill input[type=range] { width:80px; accent-color:var(--accent); cursor:pointer; }
+.eq { display:flex; gap:2px; align-items:flex-end; height:14px; }
+.eq i { display:block; width:3px; height:4px; background:var(--accent); border-radius:2px; }
+#musicPill.playing .eq i { animation:eqBar .8s ease-in-out infinite alternate; }
+.eq i:nth-child(2) { animation-delay:.2s; }
+.eq i:nth-child(3) { animation-delay:.4s; }
+@keyframes eqBar { from { height:3px; } to { height:14px; } }
+@media (max-width:480px) { #musicPill .mp-title { display:none; } }
+
+/* ===== skills, stats, quotes ===== */
+.skill { margin-bottom:18px; }
+.skill-top { display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
+.skill-track { height:14px; border-radius:10px; background:rgba(30,91,216,.15); overflow:hidden; }
+.skill-fill { height:100%; width:0; border-radius:10px; background:linear-gradient(90deg,var(--accent),#ffb703); transition:width 1.6s cubic-bezier(.22,1,.36,1); }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; }
+.stat { text-align:center; }
+.stat b { display:block; font-size:2.4rem; color:var(--accent); }
+.quote { text-align:center; min-height:110px; display:flex; flex-direction:column; justify-content:center; transition:opacity .6s, transform .25s, box-shadow .25s; }
+.quote.fade { opacity:0; }
+.quote q { font-size:1.35rem; font-style:italic; quotes:none; }
+
+/* ===== message form and share button ===== */
+.msgform:hover { transform:none; }
+.msgform label { display:block; font-weight:600; margin:10px 0 6px; }
+.msgform input, .msgform textarea { width:100%; padding:12px 14px; border-radius:12px; border:2px solid rgba(30,91,216,.3); background:var(--bg); color:var(--text); font:inherit; }
+.msgform textarea { min-height:110px; resize:vertical; }
+.msgform .row { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+.sendbtn { padding:12px 20px; border:none; border-radius:24px; background:linear-gradient(135deg,#1e5bd8,#8a5cff); color:#fff; font-weight:bold; cursor:pointer; transition:transform .2s; }
+.sendbtn:hover { transform:scale(1.06); }
+.sendbtn.wa { background:#25d366; color:#053; }
+.sharebtn { margin-top:12px; padding:10px 20px; border:none; border-radius:24px; background:#25d366; color:#053; font-weight:bold; cursor:pointer; }
+
+/* ===== chatbot (colourful) ===== */
+#chatToggle { position:fixed; left:20px; bottom:20px; width:60px; height:60px; border:none; border-radius:50%; background:linear-gradient(135deg,#ff7a18,#af002d 60%,#6a11cb); color:#fff; font-size:28px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:60; transition:transform .2s; }
+#chatToggle:hover { transform:scale(1.1); }
+#chatBox { position:fixed; left:20px; bottom:92px; width:min(340px,calc(100vw - 40px)); height:min(460px,70vh); display:none; flex-direction:column; background:linear-gradient(160deg,#14235c,#3b1a78); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:18px; box-shadow:0 12px 36px rgba(0,0,0,.4); overflow:hidden; z-index:60; }
+#chatBox.open { display:flex; animation:chatIn .3s ease-out; }
+@keyframes chatIn { from { opacity:0; transform:translateY(20px) scale(.95); } to { opacity:1; transform:none; } }
+.chat-head { background:linear-gradient(90deg,#ff7a18,#ffb703); color:#1b1b1b; padding:14px 16px; font-weight:bold; display:flex; justify-content:space-between; align-items:center; }
+.chat-head button { background:none; border:none; color:#1b1b1b; font-size:22px; cursor:pointer; }
+.chat-log { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; }
+.msg { max-width:85%; padding:10px 14px; border-radius:16px; line-height:1.4; font-size:.95rem; animation:msgIn .25s ease-out; word-wrap:break-word; }
+.msg.bot { background:rgba(255,255,255,.16); color:#fff; align-self:flex-start; border-bottom-left-radius:4px; }
+.msg.me { background:#ffb703; color:#1b1b1b; align-self:flex-end; border-bottom-right-radius:4px; }
+.msg.typing-dots { letter-spacing:3px; }
+@keyframes msgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 14px 8px; }
+.chips button { padding:6px 12px; border:1px solid #ffb703; border-radius:16px; background:transparent; color:#ffd666; font-size:.82rem; cursor:pointer; }
+.chips button:hover { background:#ffb703; color:#1b1b1b; }
+.chat-form { display:flex; gap:8px; padding:10px; border-top:1px solid rgba(255,255,255,.2); }
+.chat-form input { flex:1; min-width:0; padding:10px 12px; border-radius:20px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.12); color:#fff; font:inherit; }
+.chat-form input::placeholder { color:rgba(255,255,255,.65); }
+.chat-form button { padding:0 16px; border:none; border-radius:20px; background:#ffb703; color:#1b1b1b; font-weight:bold; cursor:pointer; }
+
+/* ===== auto scroll button ===== */
+#autoBtn { position:fixed; right:20px; bottom:150px; width:48px; height:48px; border:none; border-radius:50%; background:var(--accent); color:#fff; font-size:18px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:50; transition:transform .2s; }
+#autoBtn:hover { transform:scale(1.12); }
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="ld-name">AYOMIDE</div><div class="ld-sub">Loading my world</div><div class="ld-bar"><i></i></div></div>
+
+<div class="bg-glow"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+<button id="musicBtn" title="Play or pause music">&#9835;</button>
+<button id="toTop" title="Back to top">&#8679;</button>
+
+<div id="lightbox" aria-hidden="true">
+  <button id="lbClose" title="Close">&times;</button>
+  <button id="lbZoomIn" title="Zoom in">+</button>
+  <button id="lbZoomOut" title="Zoom out">&minus;</button>
+  <button id="lbPrev" title="Previous">&#8249;</button>
+  <img id="lbImg" alt="Enlarged picture">
+  <button id="lbNext" title="Next">&#8250;</button>
+  <div id="lbCount"></div>
+</div>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="#learning">Learning</a>
+  <a href="#skills">Skills</a>
+  <a href="#hobbies">Hobbies</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact">Contact</a>
+  <a href="about.html">About Me</a>
+  <button id="modeBtn">Dark Mode</button>
+</nav>
+
+<section id="home">
+  <div class="card hero">
+    <div>
+      <h1>Welcome, I am Ayomide</h1>
+      <p>Welcome to my personal website. This is where I share my interests, learning journey, and activities.</p>
+      <p>My name is Olalowo David Ayomide. Join me here as we build together.</p>
+    </div>
+    <div class="photos">
+      <img src="web.mp5.jpeg" alt="Ayomide's main picture">
+      <img src="3.jpg" alt="Ayomide picture 3">
+    </div>
+  </div>
+</section>
+
+<section id="learning">
+  <h2>My Learning Journey</h2>
+  <p>I enjoy learning new things and developing my knowledge in technology and computer science.</p>
+  <div class="grid">
+    <div class="card"><h3>HTML</h3><p>I am learning HTML to understand how websites are created and structured.</p></div>
+    <div class="card"><h3>CSS</h3><p>I am interested in CSS because it makes websites attractive and well organised.</p></div>
+    <div class="card"><h3>Python</h3><p>I am also interested in learning Python and improving my programming skills.</p></div>
+  </div>
+  <div class="card" style="margin-top:24px;">
+    <p>Me and my colleagues discussing coding and how to build the future together.</p>
+    <div class="photos">
+      <img src="2.jpg" alt="Ayomide picture 2">
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <h2>My Skills</h2>
+  <p>This is how my skills are growing.</p>
+  <div class="card">
+    <div class="skill"><div class="skill-top"><span>HTML</span><span>70%</span></div><div class="skill-track"><div class="skill-fill" data-level="70"></div></div></div>
+    <div class="skill"><div class="skill-top"><span>CSS</span><span>60%</span></div><div class="skill-track"><div class="skill-fill" data-level="60"></div></div></div>
+    <div class="skill"><div class="skill-top"><span>Python</span><span>40%</span></div><div class="skill-track"><div class="skill-fill" data-level="40"></div></div></div>
+  </div>
+  <div class="stats" style="margin-top:24px;">
+    <div class="card stat"><b data-days>0</b><span>Days of learning</span></div>
+    <div class="card stat"><b data-count="3">0</b><span>Technologies I am learning</span></div>
+    <div class="card stat"><b data-count="2">0</b><span>Website pages built</span></div>
+  </div>
+</section>
+
+<section id="hobbies">
+  <h2>My Hobbies and Interests</h2>
+  <p>These are some of the things I enjoy doing.</p>
+  <div class="grid">
+    <div class="card"><h3>Football</h3><p>I enjoy watching football and following my favourite football team.</p></div>
+    <div class="card"><h3>Music</h3><p>I enjoy listening to music during my free time.</p></div>
+    <div class="card"><h3>Coding</h3><p>I enjoy learning how to write code and build websites.</p></div>
+  </div>
+  <div class="card" style="margin-top:24px;">
+    <h3>Join me here</h3>
+    <div class="photos">
+      <img src="1.jpg" alt="Ayomide picture 1">
+      <img src="4.jpg" alt="Ayomide picture 4">
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2>My Gallery</h2>
+  <p>Tap any picture to see it full size.</p>
+  <div class="gallery">
+    <img src="web.mp5.jpeg" alt="Ayomide's main picture">
+    <img src="1.jpg" alt="Ayomide picture 1">
+    <img src="2.jpg" alt="Ayomide picture 2">
+    <img src="3.jpg" alt="Ayomide picture 3">
+    <img src="4.jpg" alt="Ayomide picture 4">
+  </div>
+</section>
+
+<section id="quotes">
+  <h2>Words to Keep Going</h2>
+  <div class="card quote"><q id="quoteText"></q></div>
+</section>
+
+<section id="contact">
+  <h2>Contact Me</h2>
+  <div class="card">
+    <p>Thank you for visiting my personal website.</p>
+    <p>Gmail: <a class="link" href="mailto:ayomidedavid413@gmail.com">ayomidedavid413@gmail.com</a> <button class="copybtn" data-copy="ayomidedavid413@gmail.com">Copy Email</button></p>
+    <p>Phone: <a class="link" href="tel:09166139230">09166139230</a> <button class="copybtn" data-copy="09166139230">Copy Number</button></p>
+    <p>You can also visit my <a class="link" href="https://www.youtube.com/watch?v=DWOSu8hqFDo" target="_blank">YouTube video</a>.</p>
+  </div>
+  <div class="card msgform" id="msgForm" style="margin-top:24px;">
+    <h3>Send me a message</h3>
+    <label for="mfName">Your name</label>
+    <input id="mfName" type="text" placeholder="Your name">
+    <label for="mfMsg">Your message</label>
+    <textarea id="mfMsg" placeholder="Write your message here"></textarea>
+    <div class="row">
+      <button class="sendbtn" id="sendMail" type="button">Send by Email</button>
+      <button class="sendbtn wa" id="sendWa" type="button">Send on WhatsApp</button>
+    </div>
+  </div>
+</section>
+
+<footer>&copy; 2026 Ayomide. All Rights Reserved.</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ===== YOUR SETTINGS: change these if you like ===== */
+  var CONFIG = {
+    name: 'Ayomide',
+    songTitle: 'Background Music',
+    learningStart: '2025-01-01',
+    email: 'ayomidedavid413@gmail.com',
+    whatsapp: '2349166139230',
+    phone: '09166139230',
+    youtube: 'https://www.youtube.com/watch?v=DWOSu8hqFDo',
+    wallpapers: ['web.mp5.jpeg', '1.jpg', '2.jpg', '3.jpg', '4.jpg', 'web.jpg'],
+    autoScrollSpeed: 70,
+    speech: 'Welcome to my world. My name is Olalo David Ayomide. Welcome to my personal website. This is where I share my interests, my learning journey, and my activities. I study Computer Science at NOUN, and I am learning to code. I enjoy learning new things and developing my knowledge in technology and computer science. I am learning HTML, CSS and Python. These are some of the things I enjoy doing. I enjoy watching football and following my favourite football team. I enjoy listening to music during my free time. And I enjoy learning how to write code and build websites. Thank you for visiting my website. Join me here as we build together.'
+  };
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nl = String.fromCharCode(10);
+
+  /* ===== loading screen: other scripts wait for it with whenReady ===== */
+  window.__loaded = false;
+  window.whenReady = function (fn) {
+    if (window.__loaded) { fn(); } else { document.addEventListener('loaderdone', fn, { once: true }); }
+  };
+  function finishLoading() {
+    if (window.__loaded) return;
+    var l = document.getElementById('loader');
+    if (l) l.classList.add('hide');
+    window.__loaded = true;
+    document.dispatchEvent(new Event('loaderdone'));
+  }
+  var started = Date.now();
+  function hideLoader() { setTimeout(finishLoading, Math.max(0, 1500 - (Date.now() - started))); }
+  if (document.readyState === 'complete') { hideLoader(); } else { window.addEventListener('load', hideLoader); }
+  setTimeout(finishLoading, 4000);
+
+  var audio = document.getElementById('bgMusic');
+
+  /* ===== live wallpaper: your pictures as a soft watermark, swaying like a breeze while music plays ===== */
+  var wpImgs = CONFIG.wallpapers || [];
+  if (false) {
+    var wp = document.createElement('div');
+    wp.id = 'wallpaper';
+    var s1 = document.createElement('div'); s1.className = 'wp';
+    var s2 = document.createElement('div'); s2.className = 'wp';
+    wp.appendChild(s1); wp.appendChild(s2);
+    document.body.insertBefore(wp, document.body.firstChild);
+    var wi = 0, front = s1, back = s2;
+    s1.style.backgroundImage = 'url(' + wpImgs[0] + ')';
+    s1.classList.add('show');
+    if (wpImgs.length > 1) {
+      setInterval(function () {
+        wi = (wi + 1) % wpImgs.length;
+        back.style.backgroundImage = 'url(' + wpImgs[wi] + ')';
+        back.classList.add('show');
+        front.classList.remove('show');
+        var t = front; front = back; back = t;
+      }, 9000);
+    }
+  }
+  function syncMusicClass() {
+    if (audio && !audio.paused) { document.body.classList.add('music-on'); } else { document.body.classList.remove('music-on'); }
+  }
+  if (audio) {
+    audio.addEventListener('play', syncMusicClass);
+    audio.addEventListener('pause', syncMusicClass);
+    syncMusicClass();
+  }
+
+  /* ===== flag-wave wallpaper: your pictures wave like a flag in the wind; click it to freeze and zoom ===== */
+  var flagCv = document.createElement('canvas');
+  flagCv.id = 'flagCanvas';
+  document.body.insertBefore(flagCv, document.body.firstChild);
+  var fctx = flagCv.getContext('2d');
+  var flagImgs = (CONFIG.wallpapers || []).map(function (src) {
+    var im = new Image();
+    im.onload = function () { im.ready = true; drawFlagFrame(); };
+    im.src = src;
+    im.srcName = src;
+    return im;
+  });
+  var flagIdx = 0, flagPrev = -1, flagMix = 1, flagPaused = !!reduced, flagT = 0, flagLastTs = 0, flagSwitchAt = 0;
+  function sizeFlag() {
+    flagCv.width = Math.max(200, Math.round(window.innerWidth / 2));
+    flagCv.height = Math.max(200, Math.round(window.innerHeight / 2));
+  }
+  sizeFlag();
+  window.addEventListener('resize', function () { sizeFlag(); drawFlagFrame(); });
+  function drawWave(im, alpha) {
+    var W = flagCv.width, H = flagCv.height;
+    var iw = im.naturalWidth, ih = im.naturalHeight;
+    if (!iw || !ih) return;
+    var drawH = H * 1.1;
+    var s = Math.max(W / iw, drawH / ih);
+    var sh = drawH / s;
+    var sx = (iw - W / s) / 2;
+    var strip = 3;
+    var amp = H * 0.032;
+    fctx.globalAlpha = alpha;
+    for (var x = 0; x < W; x += strip) {
+      var p = x / W;
+      var k = 0.12 + p * 0.88;
+      var ph = p * 9 - flagT * 2.6;
+      var dy = (Math.sin(ph) + Math.sin(p * 4.3 - flagT * 1.4) * 0.4) * amp * k;
+      var shade = Math.cos(ph) * k;
+      fctx.drawImage(im, sx + x / s, 0, strip / s + 0.6, sh, x, dy - H * 0.05, strip + 1, drawH);
+      fctx.fillStyle = shade > 0 ? 'rgba(255,255,255,' + (shade * 0.14) + ')' : 'rgba(0,0,0,' + (-shade * 0.2) + ')';
+      fctx.fillRect(x, dy - H * 0.05, strip + 1, drawH);
+    }
+    fctx.globalAlpha = 1;
+  }
+  function drawFlagFrame() {
+    fctx.clearRect(0, 0, flagCv.width, flagCv.height);
+    var cur = flagImgs[flagIdx];
+    var prev = flagImgs[flagPrev];
+    var fading = flagMix < 1 && prev && prev.ready;
+    if (fading) { drawWave(prev, 1 - flagMix); }
+    if (cur && cur.ready) { drawWave(cur, fading ? flagMix : 1); }
+  }
+  function nextFlagImage() {
+    for (var i = 1; i <= flagImgs.length; i++) {
+      var n = (flagIdx + i) % flagImgs.length;
+      if (flagImgs[n].ready) { flagPrev = flagIdx; flagIdx = n; flagMix = 0; return; }
+    }
+  }
+  function flagLoop(ts) {
+    if (!flagLastTs) flagLastTs = ts;
+    var dt = Math.min(0.05, (ts - flagLastTs) / 1000);
+    flagLastTs = ts;
+    if (!flagPaused) {
+      flagT += dt;
+      if (flagMix < 1) { flagMix = Math.min(1, flagMix + dt / 2); }
+      flagSwitchAt += dt;
+      if (flagSwitchAt > 10 && flagImgs.length > 1) { flagSwitchAt = 0; nextFlagImage(); }
+      drawFlagFrame();
+    }
+    requestAnimationFrame(flagLoop);
+  }
+  requestAnimationFrame(flagLoop);
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!(t === document.body || t === document.documentElement || t.tagName === 'SECTION' || t.tagName === 'MAIN')) return;
+    var im = flagImgs[flagIdx];
+    if (!im || !im.ready || !window.openLightbox) return;
+    flagPaused = true;
+    window.openLightbox(im.srcName);
+  });
+  document.addEventListener('lightboxclosed', function () { flagPaused = !!reduced; });
+
+  /* ===== read aloud: a voice reads the introduction ===== */
+  var voiceBtn = document.createElement('button');
+  voiceBtn.id = 'voiceBtn';
+  voiceBtn.type = 'button';
+  voiceBtn.title = 'Listen to my introduction';
+  voiceBtn.innerHTML = '&#128266;';
+  document.body.appendChild(voiceBtn);
+  var speaking = false, savedVol = null;
+  var spokeKey = 'spoke_' + location.pathname;
+  function endSpeech() {
+    speaking = false;
+    voiceBtn.innerHTML = '&#128266;';
+    voiceBtn.classList.remove('on');
+    if (audio && savedVol !== null) { audio.volume = savedVol; savedVol = null; }
+  }
+  function stopSpeech() {
+    if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
+    endSpeech();
+  }
+  function startSpeech() {
+    if (!('speechSynthesis' in window) || !CONFIG.speech) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(CONFIG.speech);
+    var voices = window.speechSynthesis.getVoices();
+    for (var i = 0; i < voices.length; i++) { if (/^en/i.test(voices[i].lang)) { u.voice = voices[i]; u.lang = voices[i].lang; break; } }
+    u.rate = 0.95;
+    u.onstart = function () {
+      speaking = true;
+      try { sessionStorage.setItem(spokeKey, '1'); } catch (e) {}
+      voiceBtn.innerHTML = '&#9724;';
+      voiceBtn.classList.add('on');
+      if (audio && !audio.paused && savedVol === null) { savedVol = audio.volume; audio.volume = Math.min(savedVol, 0.12); }
+    };
+    u.onend = endSpeech;
+    u.onerror = endSpeech;
+    window.speechSynthesis.speak(u);
+  }
+  voiceBtn.addEventListener('click', function () { if (speaking) { stopSpeech(); } else { startSpeech(); } });
+  function firstGesture(e) {
+    if (e.target.closest && e.target.closest('#voiceBtn')) return;
+    document.removeEventListener('click', firstGesture);
+    var done = false;
+    try { done = !!sessionStorage.getItem(spokeKey); } catch (err) {}
+    if (!done && !speaking) startSpeech();
+  }
+  document.addEventListener('click', firstGesture);
+  window.whenReady(function () { setTimeout(function () { if (!speaking) startSpeech(); }, 800); });
+  window.addEventListener('beforeunload', function () { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } });
+
+  /* ===== scroll progress bar ===== */
+  var bar = document.createElement('div');
+  bar.id = 'scrollBar';
+  document.body.appendChild(bar);
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ===== greeting and live clock ===== */
+  var greet = document.createElement('p');
+  greet.className = 'greet';
+  var heroText = $('#home .hero > div');
+  if (heroText) { heroText.insertBefore(greet, heroText.firstChild); }
+  function tick() {
+    var d = new Date();
+    var hr = d.getHours();
+    var g = hr < 12 ? 'Good morning' : (hr < 17 ? 'Good afternoon' : 'Good evening');
+    greet.textContent = g + ', visitor! It is ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' on ' + d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ===== visitor counter (this device) and share button, in the footer ===== */
+  var visits = 1;
+  try {
+    var v = parseInt(localStorage.getItem('visits') || '0', 10) || 0;
+    if (!sessionStorage.getItem('counted')) { v++; localStorage.setItem('visits', v); sessionStorage.setItem('counted', '1'); }
+    visits = v || 1;
+  } catch (e) {}
+  var foot = $('footer');
+  if (foot) {
+    var vc = document.createElement('p');
+    vc.textContent = 'Welcome! This is your visit number ' + visits + ' on this device.';
+    vc.style.marginTop = '8px';
+    vc.style.opacity = '.85';
+    foot.appendChild(vc);
+    var sb = document.createElement('button');
+    sb.className = 'sharebtn';
+    sb.type = 'button';
+    sb.textContent = 'Share my site';
+    sb.addEventListener('click', function () {
+      var url = location.href.split('#')[0];
+      var text = 'Visit the personal website of ' + CONFIG.name + ': ';
+      if (navigator.share) { navigator.share({ title: document.title, text: text, url: url }).catch(function () {}); }
+      else { window.open('https://wa.me/?text=' + encodeURIComponent(text + url), '_blank'); }
+    });
+    foot.appendChild(sb);
+  }
+
+  /* ===== cursor sparkle trail (mouse devices only) ===== */
+  var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if (fine && !reduced) {
+    var lastSpark = 0;
+    document.addEventListener('mousemove', function (e) {
+      var now = Date.now();
+      if (now - lastSpark < 40) return;
+      lastSpark = now;
+      var s = document.createElement('span');
+      s.className = 'spark';
+      s.style.left = (e.clientX - 5) + 'px';
+      s.style.top = (e.clientY - 5) + 'px';
+      s.style.setProperty('--dx', (Math.random() * 40 - 20) + 'px');
+      s.style.setProperty('--dy', (Math.random() * 40 + 10) + 'px');
+      document.body.appendChild(s);
+      setTimeout(function () { s.remove(); }, 800);
+    });
+  }
+
+  /* ===== confetti when the main heading is clicked ===== */
+  function confetti() {
+    var colors = ['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#ffb703'];
+    for (var i = 0; i < 90; i++) {
+      var c = document.createElement('i');
+      c.className = 'confetti';
+      c.style.left = (Math.random() * 100) + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.setProperty('--cx', (Math.random() * 200 - 100) + 'px');
+      c.style.setProperty('--cr', (Math.random() * 900 - 450) + 'deg');
+      c.style.animationDuration = (2 + Math.random() * 2) + 's';
+      c.style.animationDelay = (Math.random() * 0.5) + 's';
+      document.body.appendChild(c);
+      (function (el) { setTimeout(function () { el.remove(); }, 4800); })(c);
+    }
+  }
+  var mainTitle = $('#home h1');
+  if (mainTitle) {
+    mainTitle.style.cursor = 'pointer';
+    mainTitle.title = 'Click me!';
+    mainTitle.addEventListener('click', confetti);
+  }
+
+  /* ===== music pill: song title and volume slider ===== */
+  if (audio) {
+    var pill = document.createElement('div');
+    pill.id = 'musicPill';
+    pill.innerHTML = '<span class="eq"><i></i><i></i><i></i></span><span class="mp-title"></span><input type="range" min="0" max="100" aria-label="Volume">';
+    $('.mp-title', pill).textContent = CONFIG.songTitle;
+    var rng = $('input', pill);
+    rng.value = Math.round(audio.volume * 100);
+    rng.addEventListener('input', function () { audio.volume = rng.value / 100; });
+    audio.addEventListener('play', function () { pill.classList.add('playing'); });
+    audio.addEventListener('pause', function () { pill.classList.remove('playing'); });
+    document.body.appendChild(pill);
+    window.whenReady(function () {
+      rng.value = Math.round(audio.volume * 100);
+      if (!audio.paused) pill.classList.add('playing');
+    });
+  }
+
+  /* ===== skill bars and counters, animated when scrolled into view ===== */
+  function runCount(el) {
+    var target;
+    if (el.hasAttribute('data-days')) {
+      var start = new Date(CONFIG.learningStart);
+      target = Math.max(0, Math.floor((Date.now() - start.getTime()) / 86400000));
+    } else {
+      target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    }
+    var t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 1600);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var fills = $$('.skill-fill');
+  var nums = $$('[data-count], [data-days]');
+  if ('IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        if (el.classList.contains('skill-fill')) { el.style.width = el.getAttribute('data-level') + '%'; }
+        else { runCount(el); }
+        so.unobserve(el);
+      });
+    }, { threshold: 0.3 });
+    fills.forEach(function (f) { so.observe(f); });
+    nums.forEach(function (n) { so.observe(n); });
+  } else {
+    fills.forEach(function (f) { f.style.width = f.getAttribute('data-level') + '%'; });
+    nums.forEach(runCount);
+  }
+
+  /* ===== quotes that change every few seconds ===== */
+  var quotes = [
+    'Every expert was once a beginner.',
+    'Small steps every day lead to big results.',
+    'Code a little, learn a lot.',
+    'Build today, improve tomorrow.',
+    'Dream big, start small, keep going.'
+  ];
+  var qText = $('#quoteText');
+  if (qText) {
+    var qi = 0;
+    qText.textContent = quotes[0];
+    setInterval(function () {
+      var qbox = qText.parentNode;
+      qbox.classList.add('fade');
+      setTimeout(function () {
+        qi = (qi + 1) % quotes.length;
+        qText.textContent = quotes[qi];
+        qbox.classList.remove('fade');
+      }, 600);
+    }, 5000);
+  }
+
+  /* ===== message form: opens the email app or WhatsApp with the message filled in ===== */
+  if ($('#msgForm')) {
+    var getMsg = function () {
+      return { n: ($('#mfName').value.trim() || 'A visitor'), m: $('#mfMsg').value.trim() };
+    };
+    $('#sendMail').addEventListener('click', function () {
+      var c = getMsg();
+      if (!c.m) { $('#mfMsg').focus(); return; }
+      location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Message from ' + c.n + ' (website)') + '&body=' + encodeURIComponent(c.m + nl + nl + 'From: ' + c.n);
+    });
+    $('#sendWa').addEventListener('click', function () {
+      var c = getMsg();
+      if (!c.m) { $('#mfMsg').focus(); return; }
+      window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent('Hello, I am ' + c.n + '. ' + c.m), '_blank');
+    });
+  }
+
+  /* ===== chatbot: Ayo-Bot answers questions about the website and about Ayomide ===== */
+  var jokes = [
+    'Why do programmers prefer dark mode? Because light attracts bugs.',
+    'There are 10 kinds of people: those who understand binary and those who do not.',
+    'A SQL query walks into a bar, walks up to two tables and asks: can I join you?'
+  ];
+  var KB = [
+    { k: ['hello', 'hi', 'hey', 'howdy', 'good morning', 'good afternoon', 'good evening'], a: 'Hello! I am Ayo-Bot, the assistant of this website. Ask me about Ayomide, his learning, skills, hobbies or how to contact him.' },
+    { k: ['who', 'name', 'ayomide', 'david', 'about'], a: 'This website belongs to Olalo David Ayomide. He studies Computer Science at NOUN, is learning to code and loves building websites.' },
+    { k: ['learn', 'learning', 'study', 'studying', 'school', 'noun', 'course', 'university'], a: 'Ayomide studies Computer Science at NOUN. He is learning HTML, CSS and Python, and he enjoys discovering new things in computing.' },
+    { k: ['html'], a: 'HTML is the structure of a website. Ayomide is learning it to understand how websites are created and organised.' },
+    { k: ['css', 'style', 'design'], a: 'CSS makes websites attractive and well organised. Ayomide likes it because it brings pages to life, like the animations on this site.' },
+    { k: ['python'], a: 'Python is a programming language that Ayomide is learning to improve his programming skills.' },
+    { k: ['skill', 'skills', 'level', 'progress'], a: 'Scroll to the My Skills section on the home page to see the progress bars for HTML, CSS and Python.' },
+    { k: ['hobby', 'hobbies', 'interest', 'interests', 'free time', 'fun'], a: 'Ayomide enjoys football, music and coding. He follows his favourite football team, listens to music in his free time and loves learning to build websites.' },
+    { k: ['football', 'soccer', 'team'], a: 'Ayomide enjoys watching football and following his favourite football team.' },
+    { k: ['music', 'song', 'sound', 'audio', 'volume'], a: 'Background music plays on this site. Use the round button at the bottom right to play or pause it, and the slider next to it to change the volume.' },
+    { k: ['contact', 'email', 'gmail', 'mail', 'phone', 'number', 'call', 'whatsapp', 'reach', 'message'], a: 'You can email Ayomide at ' + CONFIG.email + ' or call ' + CONFIG.phone + '. You can also use the message form in the Contact section.' },
+    { k: ['youtube', 'video', 'videos', 'watch'], a: 'Ayomide has a video on YouTube: ' + CONFIG.youtube + ' You can also watch his video on the About Me page.' },
+    { k: ['website', 'site', 'built', 'build', 'made', 'code', 'create', 'created'], a: 'This website is built with HTML, CSS and JavaScript, and it is hosted on GitHub Pages.' },
+    { k: ['dark', 'light', 'theme', 'mode'], a: 'Use the Dark Mode button in the menu bar to switch between the dark and light themes.' },
+    { k: ['picture', 'pictures', 'photo', 'photos', 'gallery', 'image', 'images'], a: 'Open the My Gallery section and tap any picture to see it full size. You can move between pictures with the arrows.' },
+    { k: ['joke', 'funny', 'laugh'], a: function () { return jokes[Math.floor(Math.random() * jokes.length)]; } },
+    { k: ['time', 'date', 'today', 'day'], a: function () { var d = new Date(); return 'It is ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' on ' + d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + '.'; } },
+    { k: ['thanks', 'thank', 'thank you', 'nice', 'great', 'cool', 'awesome', 'good job'], a: 'You are welcome! Is there anything else you would like to know?' },
+    { k: ['bye', 'goodbye', 'see you', 'later'], a: 'Goodbye! Thanks for visiting. Come back soon.' },
+    { k: ['help', 'what can you do', 'options'], a: 'I can tell you about Ayomide, his learning, skills, hobbies, contact details, videos and this website. Just ask, or tap one of the buttons below.' }
+  ];
+  function reply(text) {
+    var clean = ' ' + text.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/ +/g, ' ').trim() + ' ';
+    var best = null, bestScore = 0;
+    KB.forEach(function (item) {
+      var score = 0;
+      item.k.forEach(function (key) { if (clean.indexOf(' ' + key + ' ') !== -1) { score += key.length > 3 ? 2 : 1; } });
+      if (score > bestScore) { bestScore = score; best = item; }
+    });
+    if (!best) { return 'I am not sure about that yet. You can ask about Ayomide, his learning, skills, hobbies or contact details, or send him a message at ' + CONFIG.email + '.'; }
+    return typeof best.a === 'function' ? best.a() : best.a;
+  }
+
+  var tog = document.createElement('button');
+  tog.id = 'chatToggle';
+  tog.type = 'button';
+  tog.title = 'Chat with Ayo-Bot';
+  tog.innerHTML = '&#128172;';
+  var box = document.createElement('div');
+  box.id = 'chatBox';
+  box.innerHTML = '<div class="chat-head"><span>Ayo-Bot</span><button type="button" id="chatClose" title="Close">&times;</button></div><div class="chat-log" id="chatLog"></div><div class="chips" id="chatChips"></div><div class="chat-form"><input id="chatInput" type="text" placeholder="Type your message" autocomplete="off"><button type="button" id="chatSend">Send</button></div>';
+  document.body.appendChild(tog);
+  document.body.appendChild(box);
+  var log = $('#chatLog'), input = $('#chatInput'), chips = $('#chatChips');
+  function add(text, who) {
+    var m = document.createElement('div');
+    m.className = 'msg ' + who;
+    m.textContent = text;
+    log.appendChild(m);
+    log.scrollTop = log.scrollHeight;
+    return m;
+  }
+  function botSay(text) {
+    var d = add('...', 'bot typing-dots');
+    setTimeout(function () { d.className = 'msg bot'; d.textContent = text; log.scrollTop = log.scrollHeight; }, 600 + Math.random() * 500);
+  }
+  function send(text) {
+    text = (text || '').trim();
+    if (!text) return;
+    add(text, 'me');
+    input.value = '';
+    botSay(reply(text));
+  }
+  ['Who is Ayomide?', 'What is he learning?', 'Hobbies', 'Contact', 'Tell me a joke'].forEach(function (q) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = q;
+    b.addEventListener('click', function () { send(q); });
+    chips.appendChild(b);
+  });
+  $('#chatSend').addEventListener('click', function () { send(input.value); });
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { send(input.value); } });
+  var greeted = false;
+  function toggleChat(open) {
+    box.classList.toggle('open', open);
+    if (open && !greeted) { greeted = true; botSay('Hello! I am Ayo-Bot. Ask me about Ayomide, his learning, skills, hobbies or contact details.'); }
+    if (open) { input.focus(); }
+  }
+  tog.addEventListener('click', function () { toggleChat(!box.classList.contains('open')); });
+  $('#chatClose').addEventListener('click', function () { toggleChat(false); });
+
+  /* ===== auto scroll: the page glides down by itself; wheel, touch or keys stop it ===== */
+  var autoBtn = document.createElement('button');
+  autoBtn.id = 'autoBtn';
+  autoBtn.type = 'button';
+  document.body.appendChild(autoBtn);
+  var autoRunning = false, autoDir = 1, autoPos = 0, autoLast = 0;
+  var autoSpeed = CONFIG.autoScrollSpeed || 70;
+  var rootEl = document.documentElement;
+  function maxScroll() { return Math.max(0, rootEl.scrollHeight - window.innerHeight); }
+  function autoLabel() {
+    var atBottom = window.scrollY >= maxScroll() - 5;
+    if (autoRunning) { autoBtn.innerHTML = '&#10074;&#10074;'; autoBtn.title = 'Stop auto scroll'; }
+    else if (atBottom) { autoBtn.innerHTML = '&#9650;'; autoBtn.title = 'Go back up by itself'; }
+    else { autoBtn.innerHTML = '&#9660;'; autoBtn.title = 'Scroll down by itself'; }
+  }
+  function autoStop() {
+    if (!autoRunning) return;
+    autoRunning = false;
+    rootEl.style.scrollBehavior = '';
+    autoLabel();
+  }
+  function autoStep(ts) {
+    if (!autoRunning) return;
+    if (!autoLast) autoLast = ts;
+    if ($('#lightbox.open')) { autoStop(); return; }
+    var dt = Math.min(0.1, (ts - autoLast) / 1000);
+    autoLast = ts;
+    if (Math.abs(window.scrollY - autoPos) > 40) { autoStop(); return; }
+    autoPos += autoDir * autoSpeed * (autoDir < 0 ? 2.5 : 1) * dt;
+    var max = maxScroll();
+    if (autoDir > 0 && autoPos >= max) { autoPos = max; window.scrollTo(0, autoPos); autoStop(); return; }
+    if (autoDir < 0 && autoPos <= 0) { autoPos = 0; window.scrollTo(0, 0); autoStop(); return; }
+    window.scrollTo(0, autoPos);
+    requestAnimationFrame(autoStep);
+  }
+  function autoStart(dir) {
+    autoDir = dir;
+    autoPos = window.scrollY;
+    autoLast = 0;
+    autoRunning = true;
+    rootEl.style.scrollBehavior = 'auto';
+    autoLabel();
+    requestAnimationFrame(autoStep);
+  }
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { autoStop(); }, { passive: true });
+  });
+  autoBtn.addEventListener('click', function () {
+    if (autoRunning) { autoStop(); return; }
+    var atBottom = window.scrollY >= maxScroll() - 5;
+    autoStart(atBottom ? -1 : 1);
+  });
+  window.addEventListener('scroll', function () { if (!autoRunning) autoLabel(); }, { passive: true });
+  autoLabel();
+  window.whenReady(function () {
+    setTimeout(function () {
+      if (window.scrollY < 40 && !$('#lightbox.open') && !autoRunning) autoStart(1);
+    }, 1800);
+  });
+})();
+</script>
+
+<script>
+  const btn = document.getElementById('modeBtn');
+  if (localStorage.getItem('mode') === 'dark') { document.body.classList.add('dark'); btn.textContent = 'Light Mode'; }
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const dark = document.body.classList.contains('dark');
+    btn.textContent = dark ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('mode', dark ? 'dark' : 'light');
+  });
+</script>
+
+<script>
+  const music = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicBtn');
+  music.volume = 0.4;
+  const savedTime = parseFloat(sessionStorage.getItem('musicTime') || '0');
+  const wantsMusic = sessionStorage.getItem('musicOn') !== 'off';
+  music.addEventListener('loadedmetadata', () => { if (savedTime) music.currentTime = savedTime; });
+
+  function updateButton() { musicBtn.innerHTML = music.paused ? '&#9835;' : '&#10073;&#10073;'; }
+  function startMusic() { music.play().then(updateButton).catch(() => {}); }
+
+  if (wantsMusic) {
+    startMusic();
+    const unlock = () => { if (music.paused && sessionStorage.getItem('musicOn') !== 'off') startMusic(); };
+    document.addEventListener('click', unlock, { once:true });
+    document.addEventListener('touchstart', unlock, { once:true });
+    document.addEventListener('scroll', unlock, { once:true });
+  }
+
+  musicBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (music.paused) { sessionStorage.setItem('musicOn', 'on'); startMusic(); }
+    else { music.pause(); sessionStorage.setItem('musicOn', 'off'); updateButton(); }
+  });
+
+  setInterval(() => sessionStorage.setItem('musicTime', music.currentTime), 1000);
+  window.addEventListener('beforeunload', () => sessionStorage.setItem('musicTime', music.currentTime));
+  music.addEventListener('play', updateButton);
+  music.addEventListener('pause', updateButton);
+</script>
+
+<script>
+  /* extras: typing line, back to top, copy buttons, picture lightbox */
+  (function () {
+    var rdy = window.whenReady || function (f) { f(); };
+
+    /* typing line */
+    var h = document.querySelector('#home h1, main > h1');
+    if (h) {
+      var full = h.textContent.trim();
+      h.style.minHeight = h.offsetHeight + 'px';
+      h.setAttribute('aria-label', full);
+      h.textContent = '';
+      h.classList.add('typing');
+      rdy(function () {
+        var i = 0;
+        setTimeout(function typeNext() {
+          i++;
+          h.textContent = full.slice(0, i);
+          if (i < full.length) { setTimeout(typeNext, 70); }
+          else { setTimeout(function () { h.classList.remove('typing'); }, 1800); }
+        }, 500);
+      });
+    }
+
+    /* back to top */
+    var toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', function () { toTop.classList.toggle('show', window.scrollY > 300); });
+    toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    /* copy buttons */
+    function fallbackCopy(t) {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    document.querySelectorAll('.copybtn').forEach(function (b) {
+      var label = b.textContent;
+      b.addEventListener('click', function () {
+        var t = b.getAttribute('data-copy');
+        if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).catch(function () { fallbackCopy(t); }); }
+        else { fallbackCopy(t); }
+        b.textContent = 'Copied!';
+        setTimeout(function () { b.textContent = label; }, 1800);
+      });
+    });
+
+    /* picture lightbox */
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lbImg');
+    var lbCount = document.getElementById('lbCount');
+    var srcs = [];
+    var cur = 0;
+    function show(n) {
+      cur = (n + srcs.length) % srcs.length;
+      lbImg.src = srcs[cur];
+      lbCount.textContent = (cur + 1) + ' / ' + srcs.length;
+      lbImg.style.animation = 'none';
+      void lbImg.offsetWidth;
+      zoom = 1; panX = 0; panY = 0; applyZoom();
+      lbImg.style.animation = '';
+    }
+    function openBox(s) { if (srcs.indexOf(s) === -1) { srcs.push(s); } show(srcs.indexOf(s)); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); }
+    window.openLightbox = openBox;
+    function closeBox() { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); document.dispatchEvent(new Event('lightboxclosed')); }
+    document.querySelectorAll('img').forEach(function (im) {
+      if (im.closest('#lightbox')) return;
+      var s = im.getAttribute('src');
+      if (srcs.indexOf(s) === -1) srcs.push(s);
+      im.addEventListener('click', function () { openBox(s); });
+    });
+    var zoom = 1, panX = 0, panY = 0, dragging = false, lastX = 0, lastY = 0;
+    function applyZoom() {
+      lbImg.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + zoom + ')';
+      lbImg.style.cursor = zoom > 1 ? 'grab' : 'default';
+    }
+    function setZoom(z) {
+      zoom = Math.max(1, Math.min(5, z));
+      if (zoom === 1) { panX = 0; panY = 0; }
+      applyZoom();
+    }
+    document.getElementById('lbZoomIn').addEventListener('click', function () { setZoom(zoom + 0.5); });
+    document.getElementById('lbZoomOut').addEventListener('click', function () { setZoom(zoom - 0.5); });
+    lbImg.addEventListener('wheel', function (e) { e.preventDefault(); setZoom(zoom + (e.deltaY < 0 ? 0.25 : -0.25)); }, { passive: false });
+    lbImg.addEventListener('dblclick', function () { setZoom(zoom > 1 ? 1 : 2.5); });
+    lbImg.addEventListener('pointerdown', function (e) { if (zoom > 1) { dragging = true; lastX = e.clientX; lastY = e.clientY; lbImg.setPointerCapture(e.pointerId); } });
+    lbImg.addEventListener('pointermove', function (e) { if (!dragging) return; panX += e.clientX - lastX; panY += e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; applyZoom(); });
+    lbImg.addEventListener('pointerup', function () { dragging = false; });
+    document.getElementById('lbClose').addEventListener('click', closeBox);
+    document.getElementById('lbPrev').addEventListener('click', function () { show(cur - 1); });
+    document.getElementById('lbNext').addEventListener('click', function () { show(cur + 1); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) closeBox(); });
+    document.addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeBox();
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  })();
+</script>
+
+<script>
+  /* 3D throw-in entrance: every block flies in a different way and lands with a bounce */
+  (function () {
+    var rdy = window.whenReady || function (f) { f(); };
+    const styles = ['from-left','from-right','from-top','from-bottom','from-far','from-spin'];
+    const targets = document.querySelectorAll('section > h2, section > p, section .card, section > .gallery');
+    const items = [];
+    let n = 0;
+    targets.forEach((el) => {
+      if (el.parentElement.closest('.throw')) return;
+      el.classList.add('throw', styles[n % styles.length]);
+      el.addEventListener('animationend', () => { el.classList.remove('in'); el.classList.add('done'); });
+      items.push(el);
+      n++;
+    });
+    rdy(function () {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            el.style.animationDelay = (el.dataset.delay || 0) + 'ms';
+            el.classList.add('in');
+            io.unobserve(el);
+          }
+        });
+      }, { threshold: 0.12 });
+      let order = 0;
+      items.forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) { el.dataset.delay = 200 + order * 280; order++; }
+        io.observe(el);
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
